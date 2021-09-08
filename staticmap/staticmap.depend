@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1631140887 source:c:\users\semen\infa_3sem_semenov\staticmap\main.cpp
+	<iostream>
+	<algorithm>
+	<vector>
+
