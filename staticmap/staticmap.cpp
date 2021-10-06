@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -72,10 +73,102 @@ bool FindKey(int key){
 
 int main()
 {
-    StaticMap x({{1, 27}, {14, 414}, {33, 66}});
-    std::cout << x.FindKey(99) << std::endl;
-    std::cout << x.FindKey(1) << std::endl;
-    std::cout << x.Get(1, 2020) << std::endl;
-    std::cout << x.Get(18, 2021) << std::endl;
+int pairs_num, queries_num;
+    std::cin >> pairs_num >> queries_num;
+
+    std::vector<std::pair<int, int>> dict;
+    for (int i = 0; i < pairs_num; ++i) {
+        int key, value;
+        std::cin >> key >> value;
+        dict.emplace_back(key, value);
+    }
+
+    StaticMap map(dict);
+
+    for (int i = 0; i < queries_num; ++i) {
+        int key;
+        std::cin >> key;
+        if (map.FindKey(key)) {
+            std::cout << map.Get(key, 0) << std::endl;
+        } else {
+            std::cout << "no such key" << std::endl;
+        }
+    }
+
+    return 0;
+
+}
+*/
+////////////////////////////
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+class StaticMap {
+public:
+    StaticMap(const std::vector<std::pair<int, int>>& dict) : dict_(dict) {
+        sort(dict_.begin(), dict_.end());
+    };
+
+    bool FindKey(int key) {
+        if (dict_.empty()) {
+            return false;
+        }
+        int index = BinarySearchLeftmost(0, dict_.size() - 1, key);
+        return dict_[index].first == key;
+    };
+
+    int Get(int key, int default_value) {
+        if (dict_.empty()) {
+            return default_value;
+        }
+        int index = BinarySearchLeftmost(0, dict_.size() - 1, key);
+        if (dict_[index].first == key) {
+            return dict_[index].second;
+        } else {
+            return default_value;
+        }
+    };
+
+private:
+    std::vector<std::pair<int, int>> dict_;
+
+    int BinarySearchLeftmost(int left, int right, int search_for) {
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (!(search_for <= dict_[mid].first)) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    };
+};
+
+int main() {
+    int pairs_num, queries_num;
+    std::cin >> pairs_num >> queries_num;
+
+    std::vector<std::pair<int, int>> dict;
+    for (int i = 0; i < pairs_num; ++i) {
+        int key, value;
+        std::cin >> key >> value;
+        dict.emplace_back(key, value);
+    }
+
+    StaticMap map(dict);
+
+    for (int i = 0; i < queries_num; ++i) {
+        int key;
+        std::cin >> key;
+        if (map.FindKey(key)) {
+            std::cout << map.Get(key, 0) << std::endl;
+        } else {
+            std::cout << "no such key" << std::endl;
+        }
+    }
+
     return 0;
 }
+
